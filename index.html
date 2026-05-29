@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIGIPRINT | Percetakan Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+body{ background:#0f172a; color:white; padding-bottom:120px; }
+.header{ padding:25px; background:linear-gradient(135deg,#0284c7,#2563eb); border-bottom-left-radius:30px; border-bottom-right-radius:30px; }
+.header h1{ font-size:28px; font-weight:800; letter-spacing: 1px; }
+.header p{ margin-top:5px; opacity:0.9; font-size:14px; }
+.content{ padding:20px; }
+.promo-banner { background: linear-gradient(135deg, #0f766e, #0d9488); border-radius: 15px; padding: 15px; margin-bottom: 20px; font-size: 13px; line-height: 1.5; border-left: 5px solid #34d399; }
+.promo-banner h4 { color: #a7f3d0; margin-bottom: 5px; font-size: 14px; }
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+.lacak-section { background: #1e293b; padding: 18px; border-radius: 15px; margin-bottom: 25px; border: 1px solid #334155; }
+.lacak-section h3 { font-size: 16px; color: #bae6fd; margin-bottom: 10px; }
+.lacak-input-group { display: flex; gap: 10px; }
+.lacak-input-group input { flex: 1; padding: 12px; border: 1px solid #334155; border-radius: 10px; background: #0f172a; color: white; font-size: 14px; outline: none; }
+.lacak-btn { padding: 0 20px; border: none; border-radius: 10px; background: #2563eb; color: white; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; }
+.lacak-btn:hover { background: #1d4ed8; }
+.lacak-result { margin-top: 15px; padding: 12px; border-radius: 10px; background: #0f172a; display: none; font-size: 13px; line-height: 1.6; border-left: 4px solid #38bdf8; }
+.status-badge { display: inline-block; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; text-transform: uppercase; margin-left: 5px; }
+
+.form-section { background: #1e293b; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid transparent; transition: all 0.3s; }
+.form-section.error { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); box-shadow: 0 0 10px rgba(239, 68, 68, 0.2); }
+.form-section h3 { font-size: 18px; color: #bae6fd; margin-bottom: 15px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+.input-box { margin-bottom:15px; }
+.input-box label { display:block; margin-bottom:8px; color:#cbd5e1; font-size: 13px; font-weight: 500;}
+.input-box input, .input-box select, .input-box textarea { width:100%; padding:14px; border:1px solid #334155; border-radius:12px; background:#0f172a; color:white; font-size:14px; outline: none; transition: 0.3s; }
+.input-box input:focus, .input-box select:focus, .input-box textarea:focus { border-color: #3b82f6; }
+.input-box textarea { resize: vertical; min-height: 80px; }
+.error-msg { color: #fca5a5; font-size: 13px; margin-top: 8px; display: none; }
+.search-box{ margin-bottom:20px; }
+.search-box input{ width:100%; padding:15px; border:none; border-radius:15px; background:#1e293b; color:white; font-size:15px; }
+.catalog-section { margin-bottom: 30px; }
+.category{ margin-top:10px; margin-bottom:10px; font-size:20px; font-weight:700; color: #bae6fd; }
+.cat-info { font-size: 13px; color: #cbd5e1; margin-bottom: 15px; background: rgba(37, 99, 235, 0.15); padding: 12px 15px; border-radius: 12px; border-left: 4px solid #2563eb; line-height: 1.5; }
+.menu-container{ display:flex; flex-direction:column; gap:12px; }
+.menu-card{ background:#1e293b; border-radius:20px; padding:15px; display:flex; justify-content:space-between; align-items:center; transition: background-color 0.3s, border 0.3s; }
+.menu-info { flex: 1; padding-right: 15px; }
+.menu-info h3{ font-size:15px; margin-bottom: 2px; }
+.menu-desc { font-size: 11.5px; color: #94a3b8; margin-bottom: 6px; line-height: 1.4; }
+.menu-card.rim-card { background: linear-gradient(to right, #1e293b, #1e3a5f); border: 1px solid #3b82f6; }
+.rim-badge { display: inline-block; background: #3b82f6; color: white; font-size: 10px; padding: 2px 6px; border-radius: 6px; margin-bottom: 4px; font-weight: 600; }
+.price{ color:#38bdf8; font-weight:700; font-size:15px; }
+.qty-box{ display:flex; align-items:center; gap:8px; }
+.qty-btn{ width:32px; height:32px; border:none; border-radius:10px; background:#2563eb; color:white; font-size:18px; cursor:pointer; }
+.qty{ width:20px; text-align:center; font-weight: 600; }
+.radio-group { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+.radio-label { display: flex; align-items: center; gap: 10px; background: #0f172a; padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 15px; border: 1px solid #334155; }
+.radio-label input { width: 18px; height: 18px; cursor: pointer; }
+.bottom-bar{ position:fixed; bottom:0; left:0; width:100%; background:#111827; padding:20px; border-top:1px solid #374151; z-index: 100; }
+.total-details { margin-bottom: 15px; font-size: 14px; color: #cbd5e1; }
+.total-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.total-row.grand { font-size: 18px; font-weight: 700; color: #38bdf8; margin-top: 10px; border-top: 1px dashed #334155; padding-top: 10px; }
+.order-btn{ width:100%; padding:16px; border:none; border-radius:16px; background:linear-gradient(135deg,#0284c7,#2563eb); color:white; font-size:17px; font-weight:600; cursor:pointer; }
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; overflow-y: auto; }
+.modal-content { background: #1e293b; padding: 25px; border-radius: 24px; width: 100%; max-width: 400px; text-align: center; border: 1px solid #475569; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); margin: auto; }
+.modal-content h3 { margin-bottom: 8px; color: #bae6fd; font-size: 20px; }
+.modal-desc { font-size: 13px; color: #cbd5e1; margin-bottom: 15px; line-height: 1.4; }
+.modal-total-box { font-size: 18px; font-weight: 700; color: #38bdf8; margin-bottom: 15px; background: rgba(56, 189, 248, 0.1); padding: 10px; border-radius: 12px; }
+.qris-img { width: 200px; height: 200px; object-fit: contain; background: white; padding: 10px; border-radius: 15px; margin: 0 auto 15px auto; display: block; }
+.transfer-info { background: #0f172a; padding: 15px; border-radius: 15px; text-align: left; font-size: 13px; margin-bottom: 15px; border: 1px solid #334155; color: #e2e8f0; line-height: 1.6; }
+.transfer-info h4 { color: #38bdf8; margin-bottom: 5px; font-size: 14px; }
+.transfer-info .divider { height: 1px; background: #334155; margin: 10px 0; }
+.transfer-info .note { font-style: italic; font-size: 11px; color: #94a3b8; margin-top: 10px; line-height: 1.4; }
+.upload-box { text-align: left; margin-bottom: 20px; background: #0f172a; padding: 12px; border-radius: 12px; }
+.upload-box label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 8px; font-weight: 600; }
+.upload-box input[type="file"] { width: 100%; font-size: 12px; color: #94a3b8; }
+.confirm-payment-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: #10b981; color: white; font-size: 15px; font-weight: 600; cursor: pointer; margin-bottom: 10px; }
+.cancel-payment-btn { width: 100%; padding: 10px; border: none; border-radius: 12px; background: transparent; color: #94a3b8; font-size: 14px; cursor: pointer; }
+.success-popup{ position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#10b981; padding:15px 25px; border-radius:15px; display:none; z-index:1001; font-weight: 500; text-align: center;}
+
+/* CSS KHUSUS STRUK / NOTA */
+.struk-btn-action { flex: 1; padding: 10px 5px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+.btn-unduh { background: white; color: #333; border: 1px solid #ccc; }
+.btn-cetak { background: #4f46e5; color: white; }
+.btn-tutup { background: #fecdd3; color: #ef4444; }
+
+@media print {
+  body * { visibility: hidden; }
+  #areaStruk, #areaStruk * { visibility: visible; }
+  #areaStruk { position: absolute; left: 0; top: 0; width: 100%; max-width: 300px; padding: 0; margin: 0; box-shadow: none; border: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="success-popup" id="popup">
+  <span id="popupText">Pesanan Berhasil Dikirim ✅</span>
+  <span id="popupText">pesanan telah dikonfirmasi ✅</span>
+  <span id="popupText">pesanan sedang diproses ✅</span>
+  <span id="popupText">pesanan sedang dikirim oleh penjual ✅</span>
+  <span id="popupText">pesanan telah diterima ✅</span>
+</div>
+
+<div class="modal-overlay" id="strukModal">
+  <div style="display:flex; flex-direction:column; align-items:center; gap:15px; width:100%; max-width:350px; margin:auto;">
+    
+    <div id="areaStruk" style="background: white; color: black; padding: 20px; border: 1px solid #ccc; width: 100%; font-family: 'Courier New', Courier, monospace; font-size: 13px; line-height: 1.4; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 5px;">Digiprint Sbpc.</div>
+      <div style="text-align: center; margin-bottom: 10px; font-size: 12px;">Jl. Arah Kebonklopo RT23 RW 06 Desa<br>Jatiguwi, Sumberpucung<br>083143152613</div>
+      <div style="border-top: 1px dashed black; margin-bottom: 10px;"></div>
+      <table style="width: 100%; margin-bottom: 10px; font-size: 12px;">
+        <tr><td style="width: 35px; vertical-align: top;">No</td><td style="vertical-align: top;">:</td><td id="strukNo"></td></tr>
+        <tr><td style="vertical-align: top;">Tgl</td><td style="vertical-align: top;">:</td><td id="strukTgl"></td></tr>
+      </table>
+      <div style="border-top: 1px dashed black; margin-bottom: 10px;"></div>
+      <div id="strukItem" style="margin-bottom: 10px; font-size: 12px; white-space: pre-wrap;"></div>
+      <div style="border-top: 1px dashed black; margin-bottom: 10px;"></div>
+      <table style="width: 100%; font-weight: bold; font-size: 13px;">
+        <tr><td>TOTAL</td><td style="text-align: right;" id="strukTotal"></td></tr>
+        <tr><td>BAYAR</td><td style="text-align: right;" id="strukBayar"></td></tr>
+        <tr><td>KEMBALI</td><td style="text-align: right;">Rp 0</td></tr>
+      </table>
+      <div style="margin-top: 25px; text-align: center; font-size: 12px;">Terima Kasih Atas Kunjungan Anda</div>
+    </div>
+
+    <div style="display:flex; gap:10px; width:100%;">
+      <button onclick="unduhStruk()" class="struk-btn-action btn-unduh">📷 Unduh</button>
+      <button onclick="cetakStruk()" class="struk-btn-action btn-cetak">🖨️ Cetak</button>
+      <button onclick="tutupStruk()" class="struk-btn-action btn-tutup">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal-content">
+    <h3>Pembayaran Pesanan</h3>
+    <p class="modal-desc" id="modalInstruction">Selesaikan pembayaran Anda</p>
+    <div class="modal-total-box">Total Tagihan: <span id="modalTotal">Rp 0</span></div>
+
+    <div id="areaQris" style="display:none;">
+      <img class="qris-img" src="https://i.ibb.co/N6HKMMPv/qris.png" alt="QRIS Code" onerror="this.src='https://via.placeholder.com/240?text=QRIS+DIGIPRINT'">
+    </div>
+
+    <div id="areaTransfer" style="display:none;">
+      <div class="transfer-info">
+        <h4>🏦 Transfer Bank</h4>
+        <p>Atas Nama: <b>Muhamad Rizal</b></p>
+        <p>BRI: <b>6399 0103 0917 531</b></p>
+        <p>SeaBank: <b>9013 6067 3744</b></p>
+        <div class="divider"></div>
+        <h4>📱 E-Wallet / Nomor Lain</h4>
+        <p>Atas Nama: <b>Muhamad Rizal</b></p>
+        <p>DANA: <b>0831 4315 2613</b></p>
+        <p>GoPay: <b>0838 3233 7106</b></p>
+        <p>No. Rek: <b>019 373 3333</b></p>
+        <p class="note">* Jika sudah melakukan pembayaran, mohon segera mengirimkan bukti transfer agar order bisa segera diproses.</p>
+      </div>
+    </div>
+
+    <div class="upload-box">
+      <label>Upload Bukti Pembayaran (Opsional):</label>
+      <input type="file" id="buktiTransfer" accept="image/*">
+    </div>
+
+    <button class="confirm-payment-btn" onclick="prosesKirimKeSheet()">Kirim Pesanan Sekarang</button>
+    <button class="cancel-payment-btn" onclick="tutupPopUp()">Batal / Ganti Metode</button>
+  </div>
+</div>
+
+<div class="header">
+  <h1>DIGIPRINT</h1>
+  <p>Jasa Desain dan Percetakan Digital</p>
+</div>
+
+<div class="content">
+  <div class="promo-banner">
+    <h4>🔥 INFO PAKET 1 RIM (Lebih Murah!)</h4>
+    • Max warna 30% pada cetakan<br>
+    • Tambahan Numerator: <b>+ Rp 20.000</b><br>
+    • <b>Free Pengiriman</b> area Jawa Timur
+  </div>
+
+  <div class="lacak-section">
+    <h3>🔍 Lacak Status Pesanan</h3>
+    <div class="lacak-input-group">
+      <input type="number" id="idPesananInput" placeholder="Masukkan Nomor WA (Contoh: 0812...)">
+      <button class="lacak-btn" onclick="lacakStatusPesanan()">Cek Status</button>
+    </div>
+    <div class="lacak-result" id="lacakResultBox"></div>
+  </div>
+
+  <div class="search-box">
+    <input type="text" id="search" placeholder="Cari pesanan (contoh: 3ply, rim, 1/2)...">
+  </div>
+
+  <div id="catalog-container"></div>
+
+  <div class="form-section" id="dataPenerimaSection">
+    <h3>Data Pengiriman</h3>
+    
+    <div class="input-box" id="boxPelanggan">
+      <label>Nama Pemesan (Akun)</label>
+      <input type="text" id="pelanggan" placeholder="Masukkan nama Anda" oninput="hapusError('boxPelanggan')">
+      <p class="error-msg">Wajib diisi!</p>
+    </div>
+
+    <div class="input-box" id="boxNamaPenerima">
+      <label>Nama Penerima Paket</label>
+      <input type="text" id="namaPenerima" placeholder="Nama penerima paket" oninput="hapusError('boxNamaPenerima')">
+      <p class="error-msg">Wajib diisi!</p>
+    </div>
+
+    <div class="input-box" id="boxNoPenerima">
+      <label>Nomor WhatsApp / HP</label>
+      <input type="number" id="nomorPenerima" placeholder="Contoh: 08123456789" oninput="hapusError('boxNoPenerima')">
+      <p class="error-msg">Wajib diisi!</p>
+    </div>
+
+    <div class="input-box" id="boxProvinsi">
+      <label>Provinsi</label>
+      <select id="provinsi" onchange="loadKabupaten(); hapusError('boxProvinsi'); hitungSemua()">
+        <option value="">Memuat Provinsi...</option>
+      </select>
+      <p class="error-msg">Wajib dipilih!</p>
+    </div>
+
+    <div class="input-box" id="boxKabupaten">
+      <label>Kota / Kabupaten</label>
+      <select id="kabupaten" onchange="loadKecamatan(); hapusError('boxKabupaten')" disabled>
+        <option value="">Pilih Provinsi terlebih dahulu...</option>
+      </select>
+      <p class="error-msg">Wajib dipilih!</p>
+    </div>
+
+    <div class="input-box" id="boxKecamatan">
+      <label>Kecamatan</label>
+      <select id="kecamatan" onchange="loadDesa(); hapusError('boxKecamatan')" disabled>
+        <option value="">Pilih Kota/Kabupaten terlebih dahulu...</option>
+      </select>
+      <p class="error-msg">Wajib dipilih!</p>
+    </div>
+
+    <div class="input-box" id="boxDesa">
+      <label>Desa / Kelurahan</label>
+      <select id="desa" onchange="hapusError('boxDesa')" disabled>
+        <option value="">Pilih Kecamatan terlebih dahulu...</option>
+      </select>
+      <p class="error-msg">Wajib dipilih!</p>
+    </div>
+
+    <div class="input-box" id="boxKodePos">
+      <label>Kode Pos</label>
+      <input type="number" id="kodePos" placeholder="Masukkan Kode Pos Anda" oninput="hapusError('boxKodePos')">
+      <p class="error-msg">Wajib diisi!</p>
+    </div>
+
+    <div class="input-box" id="boxAlamat">
+      <label>Alamat Lengkap & Patokan</label>
+      <textarea id="alamatLengkap" placeholder="Contoh: Jl. Merdeka No 10, RT 01 RW 02. Rumah cat biru pagar hitam." oninput="hapusError('boxAlamat')"></textarea>
+      <p class="error-msg">Wajib diisi!</p>
+    </div>
+  </div>
+
+  <div class="form-section" id="metodePembayaranSection">
+    <h3>Metode Pembayaran</h3>
+    <div class="radio-group">
+      <label class="radio-label">
+        <input type="radio" name="payment_method" value="QRIS" onchange="hapusError('metodePembayaranSection')"> Bayar via QRIS
+      </label>
+      <label class="radio-label">
+        <input type="radio" name="payment_method" value="Transfer" onchange="hapusError('metodePembayaranSection')"> Transfer Bank / E-Wallet
+      </label>
+    </div>
+    <p class="error-msg">Silakan pilih metode pembayaran!</p>
+  </div>
+</div>
+
+<div class="bottom-bar">
+  <div class="total-details">
+    <div class="total-row"><span>Subtotal:</span> <span id="txtSubtotal">Rp 0</span></div>
+    <div class="total-row"><span>Ongkos Kirim:</span> <span id="txtOngkir">Rp 0</span></div>
+    <div class="total-row grand"><span>Total Bayar:</span> <span id="txtGrandTotal">Rp 0</span></div>
+  </div>
+  <button class="order-btn" onclick="validasiDanBukaPopUp()">Pesan Sekarang</button>
+</div>
+
+<script>
+const desc1Ply50 = "50 Lbr HVS Putih 60 GSM";
+const desc2Ply50 = "50 Lbr (25 NCR Putih Utama + 25 NCR Pink Arsip)";
+const desc3Ply50 = "75 Lbr (25 NCR Putih + 25 NCR Pink + 25 NCR Kuning)";
+const desc1Ply100 = "100 Lbr HVS Putih 60 GSM";
+const desc2Ply100 = "100 Lbr (50 NCR Putih Utama + 50 NCR Pink Arsip)";
+const desc3Ply100 = "150 Lbr (50 NCR Putih + 50 NCR Pink + 50 NCR Kuning)";
+const hargaRim1 = 220000, hargaRim2 = 220000, hargaRim3 = 320000;
+
+const notaData = [
+  {
+    kategori: "Nota 1/2 Folio", ukuran: "16x21 cm", kelipatan: 2,
+    items: [
+      { nama: "1/2 Folio - 1ply (50 Lbr)", desc: desc1Ply50, harga: 11813, id: "n12_1_50" },
+      { nama: "1/2 Folio - 2ply (50 Lbr)", desc: desc2Ply50, harga: 11550, id: "n12_2_50" },
+      { nama: "1/2 Folio - 3ply (50 Lbr)", desc: desc3Ply50, harga: 17456, id: "n12_3_50" },
+      { nama: "1/2 Folio - 1ply (100 Lbr)", desc: desc1Ply100, harga: 23625, id: "n12_1_100" },
+      { nama: "1/2 Folio - 2ply (100 Lbr)", desc: desc2Ply100, harga: 23100, id: "n12_2_100" },
+      { nama: "1/2 Folio - 3ply (100 Lbr)", desc: desc3Ply100, harga: 34913, id: "n12_3_100" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 20 Buku) - 1ply", desc: desc1Ply100, harga: hargaRim1, id: "rim12_1" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 20 Buku) - 2ply", desc: desc2Ply100, harga: hargaRim2, id: "rim12_2" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 20 Buku) - 3ply", desc: desc3Ply100, harga: hargaRim3, id: "rim12_3" }
+    ]
+  },
+  {
+    kategori: "Nota 1/3 Folio", ukuran: "11x21 cm", kelipatan: 3,
+    items: [
+      { nama: "1/3 Folio - 1ply (50 Lbr)", desc: desc1Ply50, harga: 7875, id: "n13_1_50" },
+      { nama: "1/3 Folio - 2ply (50 Lbr)", desc: desc2Ply50, harga: 7700, id: "n13_2_50" },
+      { nama: "1/3 Folio - 3ply (50 Lbr)", desc: desc3Ply50, harga: 11638, id: "n13_3_50" },
+      { nama: "1/3 Folio - 1ply (100 Lbr)", desc: desc1Ply100, harga: 15750, id: "n13_1_100" },
+      { nama: "1/3 Folio - 2ply (100 Lbr)", desc: desc2Ply100, harga: 15400, id: "n13_2_100" },
+      { nama: "1/3 Folio - 3ply (100 Lbr)", desc: desc3Ply100, harga: 23275, id: "n13_3_100" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 30 Buku) - 1ply", desc: desc1Ply100, harga: hargaRim1, id: "rim13_1" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 30 Buku) - 2ply", desc: desc2Ply100, harga: hargaRim2, id: "rim13_2" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 30 Buku) - 3ply", desc: desc3Ply100, harga: hargaRim3, id: "rim13_3" }
+    ]
+  },
+  {
+    kategori: "Nota 1/4 Folio", ukuran: "8x21 cm", kelipatan: 4,
+    items: [
+      { nama: "1/4 Folio - 1ply (50 Lbr)", desc: desc1Ply50, harga: 5906, id: "n14_1_50" },
+      { nama: "1/4 Folio - 2ply (50 Lbr)", desc: desc2Ply50, harga: 5775, id: "n14_2_50" },
+      { nama: "1/4 Folio - 3ply (50 Lbr)", desc: desc3Ply50, harga: 8728, id: "n14_3_50" },
+      { nama: "1/4 Folio - 1ply (100 Lbr)", desc: desc1Ply100, harga: 11813, id: "n14_1_100" },
+      { nama: "1/4 Folio - 2ply (100 Lbr)", desc: desc2Ply100, harga: 11550, id: "n14_2_100" },
+      { nama: "1/4 Folio - 3ply (100 Lbr)", desc: desc3Ply100, harga: 17456, id: "n14_3_100" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 40 Buku) - 1ply", desc: desc1Ply100, harga: hargaRim1, id: "rim14_1" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 40 Buku) - 2ply", desc: desc2Ply100, harga: hargaRim2, id: "rim14_2" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 40 Buku) - 3ply", desc: desc3Ply100, harga: hargaRim3, id: "rim14_3" }
+    ]
+  },
+  {
+    kategori: "Nota 1/6 Folio", ukuran: "10x10 cm", kelipatan: 6,
+    items: [
+      { nama: "1/6 Folio - 1ply (50 Lbr)", desc: desc1Ply50, harga: 3938, id: "n16_1_50" },
+      { nama: "1/6 Folio - 2ply (50 Lbr)", desc: desc2Ply50, harga: 3850, id: "n16_2_50" },
+      { nama: "1/6 Folio - 3ply (50 Lbr)", desc: desc3Ply50, harga: 5819, id: "n16_3_50" },
+      { nama: "1/6 Folio - 1ply (100 Lbr)", desc: desc1Ply100, harga: 7875, id: "n16_1_100" },
+      { nama: "1/6 Folio - 2ply (100 Lbr)", desc: desc2Ply100, harga: 7700, id: "n16_2_100" },
+      { nama: "1/6 Folio - 3ply (100 Lbr)", desc: desc3Ply100, harga: 11638, id: "n16_3_100" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 60 Buku) - 1ply", desc: desc1Ply100, harga: hargaRim1, id: "rim16_1" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 60 Buku) - 2ply", desc: desc2Ply100, harga: hargaRim2, id: "rim16_2" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 60 Buku) - 3ply", desc: desc3Ply100, harga: hargaRim3, id: "rim16_3" }
+    ]
+  },
+  {
+    kategori: "Nota 1/8 Folio", ukuran: "10x8 cm", kelipatan: 8,
+    items: [
+      { nama: "1/8 Folio - 1ply (50 Lbr)", desc: desc1Ply50, harga: 2953, id: "n18_1_50" },
+      { nama: "1/8 Folio - 2ply (50 Lbr)", desc: desc2Ply50, harga: 2888, id: "n18_2_50" },
+      { nama: "1/8 Folio - 3ply (50 Lbr)", desc: desc3Ply50, harga: 4364, id: "n18_3_50" },
+      { nama: "1/8 Folio - 1ply (100 Lbr)", desc: desc1Ply100, harga: 5906, id: "n18_1_100" },
+      { nama: "1/8 Folio - 2ply (100 Lbr)", desc: desc2Ply100, harga: 5775, id: "n18_2_100" },
+      { nama: "1/8 Folio - 3ply (100 Lbr)", desc: desc3Ply100, harga: 8728, id: "n18_3_100" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 80 Buku) - 1ply", desc: desc1Ply100, harga: hargaRim1, id: "rim18_1" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 80 Buku) - 2ply", desc: desc2Ply100, harga: hargaRim2, id: "rim18_2" },
+      { isRim: true, nama: "PAKET 1 RIM (Isi 80 Buku) - 3ply", desc: desc3Ply100, harga: hargaRim3, id: "rim18_3" }
+    ]
+  }
+];
+
+const catalogContainer = document.getElementById('catalog-container');
+const allMenus = []; 
+let dataPesananSementara = null;
+let currentSubtotal = 0;
+let currentOngkir = 0;
+
+// Render HTML Katalog
+notaData.forEach(cat => {
+  let sectionHtml = `<div class="catalog-section"><h2 class="category">📄 ${cat.kategori}</h2>
+    <div class="cat-info"><b>📏 Ukuran:</b> ${cat.ukuran} <br><b>📦 Aturan Satuan:</b> Pembelian kelipatan ${cat.kelipatan} buku</div>
+    <div class="menu-container">`;
+
+  cat.items.forEach(menu => {
+    menu.kelipatan = cat.kelipatan;
+    menu.kategori = cat.kategori;
+    allMenus.push(menu); 
+    
+    const cardClass = menu.isRim ? "menu-card rim-card" : "menu-card";
+    const badgeHtml = menu.isRim ? `<span class="rim-badge">PROMO RIM</span>` : "";
+
+    sectionHtml += `
+      <div class="${cardClass}" id="card-${menu.id}">
+        <div class="menu-info">${badgeHtml}<h3>${menu.nama}</h3><div class="menu-desc">${menu.desc}</div>
+          <div class="price">Rp ${menu.harga.toLocaleString('id-ID')}</div>
+        </div>
+        <div class="qty-box">
+          <button class="qty-btn" onclick="minus('${menu.id}')">-</button>
+          <div class="qty" id="${menu.id}">0</div>
+          <button class="qty-btn" onclick="plus('${menu.id}')">+</button>
+        </div>
+      </div>`;
+  });
+  sectionHtml += `</div></div>`;
+  catalogContainer.innerHTML += sectionHtml;
+});
+
+// --- API WILAYAH (EMSIFA DROPDOWN) ---
+const apiWilayah = 'https://www.emsifa.com/api-wilayah-indonesia/api';
+
+async function fetchAPI(url, selectId, defaultText) {
+  const select = document.getElementById(selectId);
+  select.innerHTML = `<option value="">Memuat...</option>`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    select.innerHTML = `<option value="">${defaultText}</option>`;
+    data.forEach(item => { select.innerHTML += `<option value="${item.id}" data-name="${item.name}">${item.name}</option>`; });
+    select.disabled = false;
+  } catch (error) { select.innerHTML = `<option value="">Gagal memuat data</option>`; }
+}
+fetchAPI(`${apiWilayah}/provinces.json`, 'provinsi', 'Pilih Provinsi...');
+
+function loadKabupaten() {
+  const provId = document.getElementById('provinsi').value;
+  document.getElementById('kecamatan').innerHTML = '<option value="">Pilih Kota/Kabupaten terlebih dahulu...</option>';
+  document.getElementById('desa').innerHTML = '<option value="">Pilih Kecamatan terlebih dahulu...</option>';
+  document.getElementById('kecamatan').disabled = true; document.getElementById('desa').disabled = true;
+  if (provId) fetchAPI(`${apiWilayah}/regencies/${provId}.json`, 'kabupaten', 'Pilih Kota/Kabupaten...');
+  else document.getElementById('kabupaten').disabled = true;
+}
+
+function loadKecamatan() {
+  const kabId = document.getElementById('kabupaten').value;
+  document.getElementById('desa').innerHTML = '<option value="">Pilih Kecamatan terlebih dahulu...</option>';
+  document.getElementById('desa').disabled = true;
+  if (kabId) fetchAPI(`${apiWilayah}/districts/${kabId}.json`, 'kecamatan', 'Pilih Kecamatan...');
+}
+
+function loadDesa() {
+  const kecId = document.getElementById('kecamatan').value;
+  if (kecId) fetchAPI(`${apiWilayah}/villages/${kecId}.json`, 'desa', 'Pilih Desa/Kelurahan...');
+}
+
+// --- FUNGSI KERANJANG & ONGKIR ---
+function plus(id){ document.getElementById(id).innerText = parseInt(document.getElementById(id).innerText) + 1; hitungSemua(); }
+function minus(id){ let el = document.getElementById(id); if(parseInt(el.innerText) > 0){ el.innerText = parseInt(el.innerText) - 1; hitungSemua(); } }
+
+function hitungSemua() {
+  currentSubtotal = 0;
+  allMenus.forEach(menu => { currentSubtotal += parseInt(document.getElementById(menu.id).innerText) * menu.harga; });
+
+  const provSelect = document.getElementById('provinsi');
+  let namaProvinsi = provSelect.selectedIndex > 0 ? provSelect.options[provSelect.selectedIndex].getAttribute('data-name').toUpperCase() : "";
+
+  currentOngkir = 0;
+  if(currentSubtotal > 0) {
+    if (namaProvinsi.includes("JAWA TIMUR")) { currentOngkir = currentSubtotal >= 100000 ? 0 : 10000; } 
+    else if (namaProvinsi.includes("JAWA TENGAH")) { currentOngkir = 10000; } 
+    else if (namaProvinsi.includes("JAWA BARAT")) { currentOngkir = 15000; } 
+    else if (namaProvinsi !== "") { currentOngkir = 59000; }
+  }
+
+  const grandTotal = currentSubtotal + currentOngkir;
+  document.getElementById('txtSubtotal').innerText = 'Rp ' + currentSubtotal.toLocaleString('id-ID');
+  
+  if (currentSubtotal > 0 && currentOngkir === 0 && namaProvinsi.includes("JAWA TIMUR")) {
+      document.getElementById('txtOngkir').innerText = 'Rp 0 (GRATIS ONGKIR)';
+      document.getElementById('txtOngkir').style.color = '#10b981';
+  } else {
+      document.getElementById('txtOngkir').innerText = 'Rp ' + currentOngkir.toLocaleString('id-ID');
+      document.getElementById('txtOngkir').style.color = '#cbd5e1';
+  }
+  document.getElementById('txtGrandTotal').innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
+}
+
+// --- FUNGSI VALIDASI ---
+function showElementError(idBox) {
+  const box = document.getElementById(idBox);
+  box.classList.add('error');
+  box.querySelector('.error-msg').style.display = 'block';
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function hapusError(idBox) {
+  const box = document.getElementById(idBox);
+  if(box) { box.classList.remove('error'); const msg = box.querySelector('.error-msg'); if(msg) msg.style.display = 'none'; }
+}
+
+function getSelectText(selectId) {
+  const sel = document.getElementById(selectId);
+  return sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : "";
+}
+
+function validasiDanBukaPopUp() {
+  if(currentSubtotal === 0){ alert('Pilih produk yang ingin dipesan terlebih dahulu!'); return; }
+
+  // --- LOGIKA VALIDASI KELIPATAN PESANAN ---
+  let errorKelipatan = null;
+  for (let menu of allMenus) {
+    const qty = parseInt(document.getElementById(menu.id).innerText);
+    
+    if (qty > 0 && !menu.isRim) {
+      if (qty % menu.kelipatan !== 0) {
+        errorKelipatan = { id: menu.id, nama: menu.nama, kelipatan: menu.kelipatan, kategori: menu.kategori };
+        break; 
+      }
+    }
+  }
+
+  if (errorKelipatan) {
+    alert(`⚠️ JUMLAH PESANAN TIDAK SESUAI!\n\nProduk: ${errorKelipatan.nama}\n\nAturan:\nPembelian ${errorKelipatan.kategori} wajib dalam KELIPATAN ${errorKelipatan.kelipatan} (contoh pesanan yang benar: ${errorKelipatan.kelipatan}, ${errorKelipatan.kelipatan * 2}, ${errorKelipatan.kelipatan * 3}, dst).\n\nSilakan perbaiki jumlahnya terlebih dahulu.`);
+    
+    const itemBox = document.getElementById(`card-${errorKelipatan.id}`);
+    itemBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    itemBox.style.transition = "0.3s";
+    itemBox.style.backgroundColor = "rgba(239, 68, 68, 0.3)";
+    itemBox.style.border = "2px solid #ef4444";
+    
+    setTimeout(() => { 
+      itemBox.style.backgroundColor = ""; 
+      itemBox.style.border = ""; 
+    }, 2500);
+    
+    return; 
+  }
+
+  const pelanggan = document.getElementById('pelanggan').value;
+  const namaPenerima = document.getElementById('namaPenerima').value;
+  
+  // LOGIKA RAHASIA: MENAMBAHKAN TANDA PETIK DI HTML AGAR 0 TIDAK HILANG DI SHEET
+  const hpInputRaw = document.getElementById('nomorPenerima').value;
+  const nomorPenerima = "'" + hpInputRaw;
+
+  const idProv = document.getElementById('provinsi').value;
+  const idKab = document.getElementById('kabupaten').value;
+  const idKec = document.getElementById('kecamatan').value;
+  const idDesa = document.getElementById('desa').value;
+  const kodePos = document.getElementById('kodePos').value;
+  const alamatLengkap = document.getElementById('alamatLengkap').value;
+
+  if(!pelanggan) return showElementError('boxPelanggan');
+  if(!namaPenerima) return showElementError('boxNamaPenerima');
+  if(!hpInputRaw) return showElementError('boxNoPenerima');
+  if(!idProv) return showElementError('boxProvinsi');
+  if(!idKab) return showElementError('boxKabupaten');
+  if(!idKec) return showElementError('boxKecamatan');
+  if(!idDesa) return showElementError('boxDesa');
+  if(!kodePos) return showElementError('boxKodePos');
+  if(!alamatLengkap) return showElementError('boxAlamat');
+
+  const metodeDipilih = document.querySelector('input[name="payment_method"]:checked');
+  if (!metodeDipilih) return showElementError('metodePembayaranSection');
+
+  let pesananDetail = [];
+  allMenus.forEach(menu => {
+    const qty = parseInt(document.getElementById(menu.id).innerText);
+    if(qty > 0) pesananDetail.push(`${menu.nama} x${qty}`);
+  });
+
+  const alamatFull = `${alamatLengkap}, Ds/Kel. ${getSelectText('desa')}, Kec. ${getSelectText('kecamatan')}, ${getSelectText('kabupaten')}, Prov. ${getSelectText('provinsi')} - ${kodePos}`;
+
+  dataPesananSementara = {
+    meja: pelanggan, 
+    pesanan: pesananDetail.join(' | '),
+    total: currentSubtotal + currentOngkir,
+    metode_pembayaran: metodeDipilih.value,
+    nama_penerima: namaPenerima,
+    hp_penerima: nomorPenerima,
+    alamat_lengkap: alamatFull,
+    rincian_ongkir: currentOngkir
+  };
+
+  document.getElementById('modalTotal').innerText = 'Rp ' + (currentSubtotal + currentOngkir).toLocaleString('id-ID');
+  if (metodeDipilih.value === "QRIS") {
+    document.getElementById('areaQris').style.display = 'block';
+    document.getElementById('areaTransfer').style.display = 'none';
+    document.getElementById('modalInstruction').innerText = "Silakan scan kode QRIS di bawah ini untuk membayar:";
+  } else {
+    document.getElementById('areaQris').style.display = 'none';
+    document.getElementById('areaTransfer').style.display = 'block';
+    document.getElementById('modalInstruction').innerText = "Silakan transfer ke salah satu rekening berikut:";
+  }
+  document.getElementById('paymentModal').style.display = 'flex';
+}
+
+function tutupPopUp(){
+  document.getElementById('paymentModal').style.display = 'none';
+  document.getElementById('buktiTransfer').value = '';
+}
+
+// LINK SCRIPT TERBARU DAN API KEY IMGBB
+const LINK_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbwoVxXmRvGr8enBbhI6_aQCoj2Q8667RD5qqiFWGfXAJKQfdBQMDHpAUEp9VClLCVuL/exec";
+const IMGBB_API_KEY = "bfd65eb9e20be1268509210b2f8fb9a1"; 
+
+async function prosesKirimKeSheet(){
+  if(!dataPesananSementara) return;
+  const btnKirim = document.querySelector('.confirm-payment-btn');
+  btnKirim.innerText = "Sedang Memproses..."; 
+  btnKirim.disabled = true;
+
+  const fileInput = document.getElementById('buktiTransfer');
+  const file = fileInput.files[0];
+
+  const kirimDataLengkap = async (dataPayload) => {
+    try {
+      const response = await fetch(LINK_GOOGLE_SCRIPT, { 
+        method:"POST", headers: { "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(dataPayload) 
+      });
+      const result = await response.json();
+      
+      if(result.result === "success") {
+        document.getElementById('paymentModal').style.display = 'none';
+        document.getElementById('popupText').innerHTML = `Pesanan Berhasil!<br>Gunakan <b>Nomor WhatsApp</b> Anda untuk mengecek status pesanan.`;
+        const popup = document.getElementById('popup');
+        popup.style.display = 'block';
+        setTimeout(()=>{ location.reload(); }, 5000);
+      } else {
+        alert("Gagal menyimpan ke Google Sheet! Error: " + result.message);
+        btnKirim.innerText = "Kirim Pesanan Sekarang"; btnKirim.disabled = false;
+      }
+    } catch(error) {
+      alert('Gagal menghubungi server Google. Periksa internet Anda.');
+      btnKirim.innerText = "Kirim Pesanan Sekarang"; btnKirim.disabled = false;
+    }
+  };
+
+  if (file) {
+    btnKirim.innerText = "Mengupload Bukti...";
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
+      const imgbbResult = await imgbbResponse.json();
+
+      if(imgbbResult.success) {
+        dataPesananSementara.link_bukti = imgbbResult.data.url;
+        btnKirim.innerText = "Menyimpan Pesanan...";
+        await kirimDataLengkap(dataPesananSementara);
+      } else {
+        alert("Gagal mengupload gambar. Silakan coba lagi.");
+        btnKirim.innerText = "Kirim Pesanan Sekarang"; btnKirim.disabled = false;
+      }
+    } catch(e) {
+      alert("Error upload gambar.");
+      btnKirim.innerText = "Kirim Pesanan Sekarang"; btnKirim.disabled = false;
+    }
+  } else {
+    dataPesananSementara.link_bukti = "Tidak melampirkan foto";
+    btnKirim.innerText = "Menyimpan Pesanan...";
+    await kirimDataLengkap(dataPesananSementara);
+  }
+}
+
+// --- FUNGSI FORMAT TANGGAL UNTUK STRUK ---
+function formatTanggalStruk(dateString) {
+  const d = new Date(dateString);
+  if(isNaN(d.getTime())) return dateString; 
+  const pad = (n) => n.toString().padStart(2, '0');
+  return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}, ${pad(d.getHours())}.${pad(d.getMinutes())}.${pad(d.getSeconds())}`;
+}
+
+async function lacakStatusPesanan() {
+  let idInput = document.getElementById('idPesananInput').value;
+  const resultBox = document.getElementById('lacakResultBox');
+
+  if(!idInput) { alert("Masukkan Nomor WhatsApp Anda terlebih dahulu!"); return; }
+
+  resultBox.style.display = "block";
+  resultBox.style.borderLeftColor = "#38bdf8";
+  resultBox.innerHTML = "⌛ Sedang mencari pesanan terbaru Anda...";
+
+  try {
+    const response = await fetch(`${LINK_GOOGLE_SCRIPT}?id=${idInput}`);
+    const res = await response.json();
+
+    if(res.result === "success") {
+      let color = "#fbbf24"; 
+      let isKonfirmasi = false;
+      
+      const statusPesanan = res.status.toLowerCase();
+      if(statusPesanan.includes("diproses")) color = "#3b82f6"; 
+      if(statusPesanan.includes("selesai")) color = "#10b981"; 
+      if(statusPesanan.includes("konfirmasi")) { color = "#10b981"; isKonfirmasi = true; }
+
+      let htmlResult = `
+        👤 <b>Penerima:</b> ${res.nama_penerima}<br>
+        📦 <b>Pesanan:</b> ${res.detail_pesanan}<br>
+        🔄 <b>Status:</b> <span class="status-badge" style="background:${color}; color:white;">${res.status}</span>
+      `;
+
+      // Jika statusnya dikonfirmasi, munculkan tombol lihat struk
+      if (isKonfirmasi || statusPesanan.includes("selesai")) {
+        const idTrxCetak = res.id_trx.replace(/['"]/g, ''); // Hapus petik jika ada
+        const totalRp = "Rp " + parseInt(res.total_bayar).toLocaleString('id-ID');
+        
+        // Simpan data struk di memori lokal agar bisa dibuka nanti
+        window.dataStrukAktif = {
+          no: "TRX-" + idTrxCetak + Math.floor(Math.random()*100),
+          tgl: formatTanggalStruk(res.tanggal),
+          items: res.detail_pesanan.split(' | ').join('\n'),
+          total: totalRp
+        };
+
+        htmlResult += `<br><br><button onclick="bukaStruk()" style="padding: 8px 15px; background: #4f46e5; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; width: 100%;">🧾 Lihat Struk</button>`;
+      }
+
+      resultBox.style.borderLeftColor = color;
+      resultBox.innerHTML = htmlResult;
+
+    } else if(res.result === "not_found") {
+      resultBox.style.borderLeftColor = "#ef4444";
+      resultBox.innerHTML = "❌ <b>Pesanan tidak ditemukan!</b> Periksa kembali Nomor WhatsApp yang Anda masukkan.";
+    } else {
+      resultBox.innerHTML = "❌ Gagal melacak: " + res.message;
+    }
+  } catch(error) {
+    resultBox.innerHTML = "❌ Koneksi gagal. Pastikan jaringan internet stabil.";
+  }
+}
+
+// --- FUNGSI MENGELOLA STRUK / NOTA ---
+function bukaStruk() {
+  if(!window.dataStrukAktif) return;
+  document.getElementById('strukNo').innerText = window.dataStrukAktif.no;
+  document.getElementById('strukTgl').innerText = window.dataStrukAktif.tgl;
+  document.getElementById('strukItem').innerText = window.dataStrukAktif.items;
+  document.getElementById('strukTotal').innerText = window.dataStrukAktif.total;
+  document.getElementById('strukBayar').innerText = window.dataStrukAktif.total;
+  
+  document.getElementById('strukModal').style.display = 'flex';
+}
+
+function tutupStruk() {
+  document.getElementById('strukModal').style.display = 'none';
+}
+
+function cetakStruk() {
+  window.print();
+}
+
+function unduhStruk() {
+  const btnUnduh = document.querySelector('.btn-unduh');
+  btnUnduh.innerText = "Memproses...";
+  const element = document.getElementById("areaStruk");
+  
+  html2canvas(element, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
+    let a = document.createElement("a");
+    a.href = canvas.toDataURL("image/png");
+    a.download = "Struk_Digiprint_" + document.getElementById('strukNo').innerText + ".png";
+    a.click();
+    btnUnduh.innerText = "📷 Unduh";
+  });
+}
+
+document.getElementById('search').addEventListener('keyup', function(){
+  const keyword = this.value.toLowerCase();
+  const sections = document.querySelectorAll('.catalog-section');
+  const formSections = document.querySelectorAll('.form-section'); 
+  const lacakBox = document.querySelector('.lacak-section');
+
+  sections.forEach(section => {
+    let hasVisibleCard = false;
+    const cards = section.querySelectorAll('.menu-card');
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      if(text.includes(keyword)){ card.style.display = 'flex'; hasVisibleCard = true; } 
+      else { card.style.display = 'none'; }
+    });
+    section.style.display = hasVisibleCard ? 'block' : 'none';
+  });
+
+  formSections.forEach(form => { form.style.display = keyword !== '' ? 'none' : 'block'; });
+  if(lacakBox) lacakBox.style.display = keyword !== '' ? 'none' : 'block';
+});
+</script>
+</body>
+</html>
