@@ -11,7 +11,7 @@
 <style>
 *{ margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
 
-/* KODE BARU: Mengunci layar agar tidak bisa digeser ke kiri-kanan (wobble) */
+/* Mengunci layar agar tidak bisa digeser ke kiri-kanan (wobble) */
 html, body {
   max-width: 100%;
   overflow-x: hidden;
@@ -78,7 +78,12 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 .modal-content h3 { margin-bottom: 8px; color: #bae6fd; font-size: 20px; }
 .modal-desc { font-size: 13px; color: #cbd5e1; margin-bottom: 15px; line-height: 1.4; }
 .modal-total-box { font-size: 18px; font-weight: 700; color: #38bdf8; margin-bottom: 15px; background: rgba(56, 189, 248, 0.1); padding: 10px; border-radius: 12px; }
-.qris-img { width: 200px; height: 200px; object-fit: contain; background: white; padding: 10px; border-radius: 15px; margin: 0 auto 15px auto; display: block; }
+
+/* CSS UNTUK QRIS & TOMBOL UNDUH */
+.qris-img { width: 200px; height: 200px; object-fit: contain; background: white; padding: 10px; border-radius: 15px; margin: 0 auto 10px auto; display: block; }
+.qris-download-btn { display: inline-block; padding: 8px 16px; background: #38bdf8; color: #0f172a; border-radius: 10px; text-decoration: none; font-size: 13px; font-weight: 600; margin-bottom: 15px; transition: 0.2s; }
+.qris-download-btn:hover { background: #7dd3fc; }
+
 .transfer-info { background: #0f172a; padding: 15px; border-radius: 15px; text-align: left; font-size: 13px; margin-bottom: 15px; border: 1px solid #334155; color: #e2e8f0; line-height: 1.6; }
 .transfer-info h4 { color: #38bdf8; margin-bottom: 5px; font-size: 14px; }
 .transfer-info .divider { height: 1px; background: #334155; margin: 10px 0; }
@@ -153,7 +158,8 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
     <div class="modal-total-box">Total Tagihan: <span id="modalTotal">Rp 0</span></div>
 
     <div id="areaQris" style="display:none;">
-      <img class="qris-img" src="https://i.ibb.co/N6HKMMPv/qris.png" alt="QRIS Code" onerror="this.src='https://via.placeholder.com/240?text=QRIS+DIGIPRINT'">
+      <img class="qris-img" src="digiprint malang.jpeg" alt="QRIS Digiprint Malang" onerror="this.src='https://via.placeholder.com/240?text=Foto+QRIS+Tidak+Ditemukan'">
+      <a href="digiprint malang.jpeg" download="QRIS_Digiprint_Malang.jpeg" class="qris-download-btn">⬇️ Unduh Gambar QRIS</a>
     </div>
 
     <div id="areaTransfer" style="display:none;">
@@ -173,7 +179,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
     </div>
 
     <div class="upload-box">
-      <label>Upload Bukti Pembayaran (Opsional):</label>
+      <label>Upload Bukti Pembayaran (Wajib):</label>
       <input type="file" id="buktiTransfer" accept="image/*">
     </div>
 
@@ -607,12 +613,19 @@ const IMGBB_API_KEY = "bfd65eb9e20be1268509210b2f8fb9a1";
 
 async function prosesKirimKeSheet(){
   if(!dataPesananSementara) return;
-  const btnKirim = document.querySelector('.confirm-payment-btn');
-  btnKirim.innerText = "Sedang Memproses..."; 
-  btnKirim.disabled = true;
 
   const fileInput = document.getElementById('buktiTransfer');
   const file = fileInput.files[0];
+
+  // KODE BARU: VALIDASI HARUS ADA FOTO
+  if (!file) {
+    alert("⚠️ Silakan upload bukti pembayaran (foto) terlebih dahulu sebelum mengirim pesanan!");
+    return; // Hentikan eksekusi jika tidak ada foto
+  }
+
+  const btnKirim = document.querySelector('.confirm-payment-btn');
+  btnKirim.innerText = "Sedang Memproses..."; 
+  btnKirim.disabled = true;
 
   const kirimDataLengkap = async (dataPayload) => {
     try {
@@ -637,31 +650,25 @@ async function prosesKirimKeSheet(){
     }
   };
 
-  if (file) {
-    btnKirim.innerText = "Mengupload Bukti...";
-    const formData = new FormData();
-    formData.append("image", file);
+  btnKirim.innerText = "Mengupload Bukti...";
+  const formData = new FormData();
+  formData.append("image", file);
 
-    try {
-      const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
-      const imgbbResult = await imgbbResponse.json();
+  try {
+    const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
+    const imgbbResult = await imgbbResponse.json();
 
-      if(imgbbResult.success) {
-        dataPesananSementara.link_bukti = imgbbResult.data.url;
-        btnKirim.innerText = "Menyimpan Pesanan...";
-        await kirimDataLengkap(dataPesananSementara);
-      } else {
-        alert("Gagal mengupload gambar. Silakan coba lagi.");
-        btnKirim.innerText = "Kirim Pesanan Sekarang"; btnKirim.disabled = false;
-      }
-    } catch(e) {
-      alert("Error upload gambar.");
+    if(imgbbResult.success) {
+      dataPesananSementara.link_bukti = imgbbResult.data.url;
+      btnKirim.innerText = "Menyimpan Pesanan...";
+      await kirimDataLengkap(dataPesananSementara);
+    } else {
+      alert("Gagal mengupload gambar. Silakan coba lagi.");
       btnKirim.innerText = "Kirim Pesanan Sekarang"; btnKirim.disabled = false;
     }
-  } else {
-    dataPesananSementara.link_bukti = "Tidak melampirkan foto";
-    btnKirim.innerText = "Menyimpan Pesanan...";
-    await kirimDataLengkap(dataPesananSementara);
+  } catch(e) {
+    alert("Error upload gambar. Pastikan internet stabil.");
+    btnKirim.innerText = "Kirim Pesanan Sekarang"; btnKirim.disabled = false;
   }
 }
 
