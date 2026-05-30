@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>DIGIPRINT | Percetakan Digital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,7 +10,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{ margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
-body{ background:#0f172a; color:white; padding-bottom:90px; } /* Jarak bawah disesuaikan agar tidak terlalu renggang */
+
+/* KODE BARU: Mengunci layar agar tidak bisa digeser ke kiri-kanan (wobble) */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body{ background:#0f172a; color:white; padding-bottom:90px; }
 .header{ padding:25px; background:linear-gradient(135deg,#0284c7,#2563eb); border-bottom-left-radius:30px; border-bottom-right-radius:30px; }
 .header h1{ font-size:28px; font-weight:800; letter-spacing: 1px; }
 .header p{ margin-top:5px; opacity:0.9; font-size:14px; }
@@ -60,7 +67,6 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 .radio-label { display: flex; align-items: center; gap: 10px; background: #0f172a; padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 15px; border: 1px solid #334155; }
 .radio-label input { width: 18px; height: 18px; cursor: pointer; }
 
-/* CSS UNTUK BOTTOM BAR DIPERKECIL */
 .bottom-bar{ position:fixed; bottom:0; left:0; width:100%; background:#111827; padding:12px 20px; border-top:1px solid #374151; z-index: 100; }
 .total-details { margin-bottom: 10px; font-size: 12px; color: #cbd5e1; }
 .total-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
@@ -82,7 +88,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 .upload-box input[type="file"] { width: 100%; font-size: 12px; color: #94a3b8; }
 .confirm-payment-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: #10b981; color: white; font-size: 15px; font-weight: 600; cursor: pointer; margin-bottom: 10px; }
 .cancel-payment-btn { width: 100%; padding: 10px; border: none; border-radius: 12px; background: transparent; color: #94a3b8; font-size: 14px; cursor: pointer; }
-.success-popup{ position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#10b981; padding:15px 25px; border-radius:15px; display:none; z-index:1001; font-weight: 500; text-align: center;}
+.success-popup{ position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#10b981; padding:15px 25px; border-radius:15px; display:none; z-index:1001; font-weight: 500; text-align: center; width: max-content; max-width: 90%; }
 
 /* CSS KHUSUS STRUK / NOTA */
 .struk-btn-action { flex: 1; padding: 10px 5px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.2s; }
@@ -596,7 +602,7 @@ function tutupPopUp(){
 }
 
 // LINK SCRIPT TERBARU DAN API KEY IMGBB
-const LINK_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbyefhUYGuTfGnuKTkU6TttArX6ZY2KbpV8vwTR7vtbxYREZ7dYbPo51AJWmJyunIdsi/exec";
+const LINK_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbwoVxXmRvGr8enBbhI6_aQCoj2Q8667RD5qqiFWGfXAJKQfdBQMDHpAUEp9VClLCVuL/exec";
 const IMGBB_API_KEY = "bfd65eb9e20be1268509210b2f8fb9a1"; 
 
 async function prosesKirimKeSheet(){
